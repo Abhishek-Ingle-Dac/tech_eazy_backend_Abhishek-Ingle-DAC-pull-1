@@ -21,7 +21,7 @@ import com.example.parcelmanagment.service.DeliveryOrderService;
 
 @RestController
 @RequestMapping("/api/orders")
-
+//@RequiredArgsConstructor
 public class DeliveryOrderController {
   private final DeliveryOrderService service;
 
@@ -58,12 +58,22 @@ public class DeliveryOrderController {
   private DeliveryOrderDTO toDto(DeliveryOrder o) {
     DeliveryOrderDTO dto = new DeliveryOrderDTO();
     dto.setDate(o.getDeliveryDate());
-    dto.setVendorName(o.getVendorName());
+    dto.setVendorName(o.getVendor().getName());
     dto.setTotalOrders(o.getTotalOrders());
     dto.setDownloadLink(o.getFilePath());
     return dto;
   }
 }
 
-
+//@RestController
+//@RequestMapping("/api/vendors")
+//@RequiredArgsConstructor
+//public class VendorController {
+//  private final VendorService service;
+//
+//  @GetMapping
+//  public Page<Vendor> list(Pageable p) {
+//    return service.list(p);
+//  }
+//}
 

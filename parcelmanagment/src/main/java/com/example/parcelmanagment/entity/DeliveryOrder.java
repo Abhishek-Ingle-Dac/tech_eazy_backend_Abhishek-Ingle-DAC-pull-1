@@ -14,7 +14,7 @@ private LocalDate deliveryDate;
 private int totalOrders;
 private String filePath;
 private String vendorName;
-
+@ManyToOne private Vendor vendor;
 public Long getId() {
 	return id;
 }
@@ -39,7 +39,12 @@ public String getFilePath() {
 public void setFilePath(String filePath) {
 	this.filePath = filePath;
 }
-
+public Vendor getVendor() {
+	return vendor;
+}
+public void setVendor(Vendor vendor) {
+	this.vendor = vendor;
+}
 public String getVendorName() {
     return vendorName;
 }
