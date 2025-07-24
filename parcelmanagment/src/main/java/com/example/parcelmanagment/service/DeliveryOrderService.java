@@ -1,7 +1,10 @@
 package com.example.parcelmanagment.service;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.*;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.parcelmanagment.dto.DeliveryOrderDTO;
 import com.example.parcelmanagment.entity.DeliveryOrder;
 import com.example.parcelmanagment.repository.DeliveryOrderRepo;
+import com.example.parcelmanagment.repository.VendorRepo;
 
 @Service
 public class DeliveryOrderService {
@@ -23,9 +27,11 @@ public class DeliveryOrderService {
     private String uploadDir;
 
     private final DeliveryOrderRepo orderRepo;
+    private final VendorRepo vendorRepo;
 
-    public DeliveryOrderService(DeliveryOrderRepo orderRepo) {
+    public DeliveryOrderService(DeliveryOrderRepo orderRepo, VendorRepo vendorRepo) {
         this.orderRepo = orderRepo;
+        this.vendorRepo = vendorRepo;
     }
 
     public DeliveryOrder createFromFile(MultipartFile file, String vendorName, LocalDate date) throws IOException {
@@ -58,9 +64,9 @@ public class DeliveryOrderService {
 
     public Page<DeliveryOrder> getOrders(String vendorName, LocalDate date, Pageable pageable) {
         if (vendorName != null && date != null) {
-            return orderRepo.findByVendorNameAndDeliveryDate(vendorName, date, pageable);
+            return orderRepo.findByVendor_NameAndDeliveryDate(vendorName, date, pageable);
         } else if (vendorName != null) {
-            return orderRepo.findByVendorName(vendorName, pageable);
+            return orderRepo.findByVendor_Name(vendorName, pageable);
         } else if (date != null) {
             return orderRepo.findByDeliveryDate(date, pageable);
         } else {
@@ -69,6 +75,19 @@ public class DeliveryOrderService {
     }
 
     public Page<DeliveryOrder> listOrders(LocalDate date, String vendorName, Pageable pageable) {
-        return getOrders(vendorName, date, pageable);
+        if (date != null && vendorName != null) {
+            return orderRepo.findByVendor_NameAndDeliveryDate(vendorName, date, pageable);
+        } else if (vendorName != null) {
+            return orderRepo.findByVendor_Name(vendorName, pageable);
+        } else if (date != null) {
+            return orderRepo.findByDeliveryDate(date, pageable);
+        } else {
+            return orderRepo.findAll(pageable);
+        }
     }
+
+//	public DeliveryOrder processUpload(MultipartFile file, String vendor, LocalDate date) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 }

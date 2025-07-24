@@ -16,7 +16,7 @@ public class Vendor {
 private String name;
 @Enumerated(EnumType.STRING)
 private SubscriptionType type;
-
+@OneToMany(mappedBy="vendor")
 private List<DeliveryOrder> orders;
 public Long getId() {
 	return id;
